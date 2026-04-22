@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.aeron</groupId>
+        <artifactId>aeron</artifactId>
+        <version>1.51.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>aeron-test-base</artifactId>
+
+    <!-- Zero-aeron-dependency test utilities (JUnit/java.* only).
+         Placed before aeron-client so it can be used as a test dep without
+         creating a Maven reactor cycle. -->
+
+    <dependencies>
+        <dependency>
+            <groupId>org.agrona</groupId>
+            <artifactId>agrona</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>io.aeron.test.base</Automatic-Module-Name>
+                            <Implementation-Title>Aeron</Implementation-Title>
+                            <Implementation-Vendor>Adaptive Financial Consulting Limited</Implementation-Vendor>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

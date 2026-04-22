@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.aeron</groupId>
+    <artifactId>aeron</artifactId>
+    <version>1.51.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Aeron</name>
+    <description>Efficient reliable UDP unicast, UDP multicast, and IPC transport protocol.</description>
+    <url>https://github.com/aeron-io/aeron</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>tmontgomery</id>
+            <name>Todd L. Montgomery</name>
+            <email>tmont@nard.net</email>
+            <url>https://github.com/tmontgomery</url>
+        </developer>
+        <developer>
+            <id>mjpt777</id>
+            <name>Martin Thompson</name>
+            <email>mjpt777@gmail.com</email>
+            <url>https://github.com/mjpt777</url>
+        </developer>
+        <developer>
+            <id>mikeb01</id>
+            <name>Mike Barker</name>
+            <email>mikeb01@gmail.com</email>
+            <url>https://github.com/mikeb01</url>
+        </developer>
+        <developer>
+            <id>vyazelenko</id>
+            <name>Dmytro Vyazelenko</name>
+            <email>vyazelenko@protonmail.com</email>
+            <url>https://github.com/vyazelenko</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/aeron-io/aeron.git</connection>
+        <developerConnection>scm:git:https://github.com/aeron-io/aeron.git</developerConnection>
+        <url>https://github.com/aeron-io/aeron.git</url>
+    </scm>
+
+    <!-- Module build order respects compile-scope inter-module dependencies.
+         NOTE: aeron-test-support has circular test-scope deps with earlier modules.
+         Modules (client/driver/archive/cluster/samples) exclude tests that import
+         io.aeron.test.* to avoid the Maven reactor cycle. Those tests can be run
+         via: mvn install -DskipTests && mvn test -pl <module> (with test-support in local repo). -->
+    <modules>
+        <module>aeron-annotations</module>
+        <module>aeron-test-base</module>
+        <module>aeron-client</module>
+        <module>aeron-driver</module>
+        <module>aeron-archive</module>
+        <module>aeron-cluster</module>
+        <module>aeron-agent</module>
+        <module>aeron-samples</module>
+        <module>aeron-test-support</module>
+        <module>aeron-system-tests</module>
+        <module>aeron-all</module>
+    </modules>
+
+    <properties>
+        <!-- Build -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release>
+
+        <!-- Dependency versions (from gradle/libs.versions.toml) -->
+        <agrona.version>2.4.0</agrona.version>
+        <asm.version>9.9.1</asm.version>
+        <byteBuddy.version>1.18.7</byteBuddy.version>
+        <commons-codec.version>1.15</commons-codec.version>
+        <commons-lang3.version>3.8.1</commons-lang3.version>
+        <findbugs.version>3.0.1</findbugs.version>
+        <hamcrest.version>3.0</hamcrest.version>
+        <hdrHistogram.version>2.2.2</hdrHistogram.version>
+        <junit.version>6.0.3</junit.version>
+        <mockito.version>5.23.0</mockito.version>
+        <sbe.version>1.37.1</sbe.version>
+
+        <!-- Plugin versions -->
+        <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+        <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- JUnit 5 BOM — governs all org.junit.* versions -->
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Core -->
+            <dependency>
+                <groupId>org.agrona</groupId>
+                <artifactId>agrona</artifactId>
+                <version>${agrona.version}</version>
+            </dependency>
+
+            <!-- ASM -->
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm-analysis</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm-commons</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm-tree</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm-util</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+
+            <!-- Byte Buddy -->
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${byteBuddy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>${byteBuddy.version}</version>
+            </dependency>
+
+            <!-- Utilities -->
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>findbugs-annotations</artifactId>
+                <version>${findbugs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hdrhistogram</groupId>
+                <artifactId>HdrHistogram</artifactId>
+                <version>${hdrHistogram.version}</version>
+            </dependency>
+
+            <!-- SBE -->
+            <dependency>
+                <groupId>uk.co.real-logic</groupId>
+                <artifactId>sbe-tool</artifactId>
+                <version>${sbe.version}</version>
+            </dependency>
+
+            <!-- Test -->
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest</artifactId>
+                <version>${hamcrest.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+
+            <!-- Internal modules -->
+            <dependency>
+                <groupId>io.aeron</groupId>
+                <artifactId>aeron-annotations</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.aeron</groupId>
+                <artifactId>aeron-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.aeron</groupId>
+                <artifactId>aeron-driver</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.aeron</groupId>
+                <artifactId>aeron-archive</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.aeron</groupId>
+                <artifactId>aeron-cluster</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.aeron</groupId>
+                <artifactId>aeron-agent</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.aeron</groupId>
+                <artifactId>aeron-samples</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.aeron</groupId>
+                <artifactId>aeron-test-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.aeron</groupId>
+                <artifactId>aeron-test-support</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- Common dependencies inherited by all child modules -->
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <release>17</release>
+                        <compilerArgs>
+                            <arg>-Xlint:all,-processing</arg>
+                            <arg>-Aio.aeron.version=${project.version}</arg>
+                            <arg>-Aio.aeron.gitsha=unknown</arg>
+                            <!-- Sets StandardLocation.NATIVE_HEADER_OUTPUT, required by ConfigProcessor
+                                 and CounterProcessor annotation processors to write .dat output files -->
+                            <arg>-h</arg>
+                            <arg>${project.build.directory}/generated-headers</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <useJUnitPlatform>true</useJUnitPlatform>
+                        <argLine>
+                            --add-opens java.base/jdk.internal.misc=ALL-UNNAMED
+                            --add-opens java.base/java.util.zip=ALL-UNNAMED
+                            -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+                            -XX:MaxDirectMemorySize=2g
+                            -Xms512m
+                            -Xmx2048m
+                        </argLine>
+                        <systemPropertyVariables>
+                            <java.util.logging.config.class>io.aeron.test.DisableJavaUtilLogging</java.util.logging.config.class>
+                            <aeron.shared.idle.strategy>yield</aeron.shared.idle.strategy>
+                            <aeron.conductor.idle.strategy>yield</aeron.conductor.idle.strategy>
+                            <aeron.sender.idle.strategy>yield</aeron.sender.idle.strategy>
+                            <aeron.receiver.idle.strategy>yield</aeron.receiver.idle.strategy>
+                            <aeron.use.windows.high.res.timer>true</aeron.use.windows.high.res.timer>
+                            <aeron.timer.interval>100ms</aeron.timer.interval>
+                            <aeron.dir.delete.on.start>true</aeron.dir.delete.on.start>
+                            <aeron.term.buffer.sparse.file>true</aeron.term.buffer.sparse.file>
+                            <aeron.perform.storage.checks>false</aeron.perform.storage.checks>
+                            <agrona.disable.bounds.checks>false</agrona.disable.bounds.checks>
+                            <agrona.strict.alignment.checks>true</agrona.strict.alignment.checks>
+                            <net.bytebuddy.experimental>true</net.bytebuddy.experimental>
+                            <io.aeron.shadow.net.bytebuddy.experimental>true</io.aeron.shadow.net.bytebuddy.experimental>
+                            <net.bytebuddy.safe>true</net.bytebuddy.safe>
+                            <io.aeron.shadow.net.bytebuddy.safe>true</io.aeron.shadow.net.bytebuddy.safe>
+                            <java.net.preferIPv4Stack>true</java.net.preferIPv4Stack>
+                            <aeron.fallback.logger>no_op</aeron.fallback.logger>
+                        </systemPropertyVariables>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${maven-antrun-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build-helper-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>${maven-shade-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

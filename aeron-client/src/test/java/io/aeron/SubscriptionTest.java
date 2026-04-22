@@ -20,7 +20,7 @@ import io.aeron.logbuffer.Header;
 import io.aeron.logbuffer.LogBufferDescriptor;
 import io.aeron.protocol.DataHeaderFlyweight;
 import io.aeron.status.LocalSocketAddressStatus;
-import io.aeron.test.Tests;
+import io.aeron.test.TestUtil;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.agrona.concurrent.status.AtomicCounter;
 import org.agrona.concurrent.status.CountersManager;
@@ -58,7 +58,7 @@ class SubscriptionTest
     private final UnavailableImageHandler unavailableImageHandlerMock = mock(UnavailableImageHandler.class);
 
     private final UnsafeBuffer tempBuffer = new UnsafeBuffer(ByteBuffer.allocate(1024));
-    private final CountersManager countersManager = Tests.newCountersManager(16 * 1024);
+    private final CountersManager countersManager = TestUtil.newCountersManager(16 * 1024);
 
     private Subscription subscription;
 

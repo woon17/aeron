@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.aeron</groupId>
+        <artifactId>aeron</artifactId>
+        <version>1.51.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>aeron-system-tests</artifactId>
+
+    <!-- Test-only module: no main sources. All test imports come from production jars
+         and aeron-test-support (not from test-jar artifacts of other modules). -->
+    <dependencies>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-archive</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-test-support</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-samples</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-cluster</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy-agent</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>findbugs-annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>

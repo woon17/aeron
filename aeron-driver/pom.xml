@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.aeron</groupId>
+        <artifactId>aeron</artifactId>
+        <version>1.51.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>aeron-driver</artifactId>
+
+    <!-- NOTE: Test sources here require aeron-test-support (circular dep in Maven reactor).
+         Tests are skipped during the reactor build. Run them individually after 'mvn install'. -->
+
+    <dependencies>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>io.aeron.driver</Automatic-Module-Name>
+                            <Implementation-Title>Aeron</Implementation-Title>
+                            <Implementation-Vendor>Adaptive Financial Consulting Limited</Implementation-Vendor>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

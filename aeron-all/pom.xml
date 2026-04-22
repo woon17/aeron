@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.aeron</groupId>
+        <artifactId>aeron</artifactId>
+        <version>1.51.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>aeron-all</artifactId>
+
+    <!-- Aggregator: produces a fat-jar containing all Aeron modules -->
+    <dependencies>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-cluster</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-samples</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>shade-all</id>
+                        <phase>package</phase>
+                        <goals><goal>shade</goal></goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                        <!-- Skip Java 24 multi-release classes; shade runs on Java 17 -->
+                                        <exclude>META-INF/versions/24/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <relocations>
+                                <relocation>
+                                    <pattern>net.bytebuddy</pattern>
+                                    <shadedPattern>io.aeron.shadow.net.bytebuddy</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.HdrHistogram</pattern>
+                                    <shadedPattern>io.aeron.shadow.org.HdrHistogram</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Automatic-Module-Name>io.aeron.all</Automatic-Module-Name>
+                                        <Implementation-Title>Aeron</Implementation-Title>
+                                        <Implementation-Vendor>Adaptive Financial Consulting Limited</Implementation-Vendor>
+                                        <Implementation-Version>${project.version}</Implementation-Version>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

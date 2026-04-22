@@ -15,7 +15,7 @@
  */
 package io.aeron;
 
-import io.aeron.test.Tests;
+import io.aeron.test.TestUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -82,7 +82,7 @@ class ChannelUriTest
     @ValueSource(ints = { MAX_URI_LENGTH + 1, 10000 })
     void shouldRejectUriIfLengthExceedsMaxAllowed(final int length)
     {
-        final String uri = Tests.generateStringWithSuffix("aeron:ipc?alias=", "x", length);
+        final String uri = TestUtil.generateStringWithSuffix("aeron:ipc?alias=", "x", length);
         final IllegalArgumentException exception =
             assertThrows(IllegalArgumentException.class, () -> ChannelUri.parse(uri));
         assertEquals("URI length (" + uri.length() + ") exceeds max supported length (" + MAX_URI_LENGTH +

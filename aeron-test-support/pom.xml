@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.aeron</groupId>
+        <artifactId>aeron</artifactId>
+        <version>1.51.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>aeron-test-support</artifactId>
+
+    <!-- NOTE: This module has compile-scope deps on aeron-client, aeron-cluster, and
+         aeron-samples. Those modules test-depend back on this module, creating a
+         circular dependency that Maven cannot resolve in a single reactor pass.
+         Solution: earlier modules exclude the specific test files that need this module
+         via maven-compiler-plugin <testExcludes>. Those tests can be run after
+         'mvn install -DskipTests' installs this module to the local repo. -->
+    <dependencies>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-test-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-cluster</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-samples</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>io.aeron.test.support</Automatic-Module-Name>
+                            <Implementation-Title>Aeron</Implementation-Title>
+                            <Implementation-Vendor>Adaptive Financial Consulting Limited</Implementation-Vendor>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

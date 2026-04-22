@@ -15,7 +15,7 @@
  */
 package io.aeron;
 
-import io.aeron.test.Tests;
+import io.aeron.test.TestUtil;
 import org.agrona.ExpandableArrayBuffer;
 import org.agrona.collections.Int2ObjectHashMap;
 import org.agrona.concurrent.UnsafeBuffer;
@@ -212,7 +212,7 @@ class AeronCountersTest
             StandardCharsets.US_ASCII);
         final String initialLabel = "this is a test counter";
         final int counterId = countersManager.allocate(initialLabel);
-        final String hugeSuffix = Tests.generateStringWithSuffix(" - 42", "x", MAX_LABEL_LENGTH);
+        final String hugeSuffix = TestUtil.generateStringWithSuffix(" - 42", "x", MAX_LABEL_LENGTH);
 
         final int length = AeronCounters.appendToLabel(countersManager.metaDataBuffer(), counterId, hugeSuffix);
 
@@ -228,7 +228,7 @@ class AeronCountersTest
             new UnsafeBuffer(new byte[METADATA_LENGTH]),
             new UnsafeBuffer(ByteBuffer.allocateDirect(COUNTER_LENGTH)),
             StandardCharsets.US_ASCII);
-        final String label = Tests.generateStringWithSuffix("", "a", MAX_LABEL_LENGTH);
+        final String label = TestUtil.generateStringWithSuffix("", "a", MAX_LABEL_LENGTH);
         final int counterId = countersManager.allocate(label);
 
         final int length = AeronCounters.appendToLabel(countersManager.metaDataBuffer(), counterId, "test");
